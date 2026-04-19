@@ -1,68 +1,32 @@
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
-});
+const api = axios.create({ baseURL: 'http://localhost:5000' });
+
+api.interceptors.response.use(
+  res => res,
+  err => {
+    console.error("API error:", err);
+    return Promise.reject(err);
+  }
+);
 
 export const inventoryApi = {
+  getAll: () => api.get('/inventory'),
+  getById: (id) => api.get(`/inventory/${id}`),
+
+  create: (formData) => api.post('/register', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
   
-  getInventory: async () => {
-    try {
-      const response = await api.get('/inventory');
-      return response.data;
-    } catch (error) {
-      console.error("Помилка при отриманні списку:", error);
-      throw error;
-    }
+  updateText: (id, data) => api.put(`/inventory/${id}`, data),
+
+  updatePhoto: (id, file) => {
+    const fd = new FormData();
+    fd.append('photo', file);
+    return api.put(`/inventory/${id}/photo`, fd, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
   },
 
-  getInventoryById: async (id) => {
-    try {
-      const response = await api.get(`/inventory/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error("Помилка при отриманні товару:", error);
-      throw error;
-    }
-  },
-
-  createInventory: async (formData) => {
-    try {
-      const response = await api.post('/register', formData);
-      return response.data;
-    } catch (error) {
-      console.error("Помилка при створенні:", error);
-      throw error;
-    }
-  },
-
-  updateInventoryText: async (id, data) => {
-    try {
-      const response = await api.put(`/inventory/${id}`, data);
-      return response.data;
-    } catch (error) {
-      console.error("Помилка при оновленні:", error);
-      throw error;
-    }
-  },
-
-  updateInventoryPhoto: async (id, formData) => {
-    try {
-      const response = await api.put(`/inventory/${id}/photo`, formData);
-      return response.data;
-    } catch (error) {
-      console.error("Помилка при оновленні фото:", error);
-      throw error;
-    }
-  },
-
-  deleteInventory: async (id) => {
-    try {
-      const response = await api.delete(`/inventory/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error("Помилка при видаленні:", error);
-      throw error;
-    }
-  }
+  delete: (id) => api.delete(`/inventory/${id}`),
 };

@@ -1,17 +1,14 @@
-import {Link, NavLink} from "react-router-dom"
-
-
-const Navbar = () => {
-    return (
-        <nav className="flex justify-between items-center p-4 bg-gray-800 text-white">
-           <Link to="/" className="text-xl font-bold hover:text-gray-300 transition-colors">Warehouse System</Link>
-            <div className="flex gap-4">
-                <NavLink to="/">Gallery</NavLink>
-                <NavLink to="/favorites">Favourites</NavLink>
-                <NavLink to="/admin">Admin</NavLink>
-            </div>
-        </nav>
-    );
-};
-
+import { Link } from 'react-router-dom';
+const Navbar = () => (
+  <nav className="navbar">
+    <div className="container nav-box">
+      <Link to="/" className="logo">Склад 2024</Link>
+      <div className="links">
+        <Link to="/">Галерея</Link>
+        <Link to="/favorites">Улюблені ❤️</Link>
+        <Link to="/admin">Адмінка</Link>
+      </div>
+    </div>
+  </nav>
+);
 export default Navbar;
